@@ -16,12 +16,4 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Bookzilla.API.DataAccessLayer\Bookzilla.API.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Bookzilla.API.Models\Bookzilla.API.Models.csproj" />
-    <ProjectReference Include="..\Bookzilla.API.Services\Bookzilla.API.Services.csproj" />
-  </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
-
 </Project>

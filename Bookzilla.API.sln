@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32901.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API", "Bookzilla.API\Bookzilla.API.csproj", "{EA35D5E6-0D5F-4CC4-B6CA-C225CB11152A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API", "Bookzilla.API\Bookzilla.API.csproj", "{EA35D5E6-0D5F-4CC4-B6CA-C225CB11152A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API.Models", "Bookzilla.API.Models\Bookzilla.API.Models.csproj", "{B82B7CFC-B87C-4AAB-A8CB-43D6CDE5E45F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API.Models", "Bookzilla.API.Models\Bookzilla.API.Models.csproj", "{B82B7CFC-B87C-4AAB-A8CB-43D6CDE5E45F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API.DataAccessLayer", "Bookzilla.API.DataAccessLayer\Bookzilla.API.DataAccessLayer.csproj", "{D80F63CC-EA80-49E3-9FBE-312DECE36F1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API.DataAccessLayer", "Bookzilla.API.DataAccessLayer\Bookzilla.API.DataAccessLayer.csproj", "{D80F63CC-EA80-49E3-9FBE-312DECE36F1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API.Mapper", "Bookzilla.API.Mapper\Bookzilla.API.Mapper.csproj", "{A31723FD-9A69-4A89-B1AC-B28BAC83C7E3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API.Mapper", "Bookzilla.API.Mapper\Bookzilla.API.Mapper.csproj", "{A31723FD-9A69-4A89-B1AC-B28BAC83C7E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API.Repository", "Bookzilla.API.Repository\Bookzilla.API.Repository.csproj", "{BCC4DAD4-6581-4CDD-9A23-16681CB48817}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API.Repository", "Bookzilla.API.Repository\Bookzilla.API.Repository.csproj", "{BCC4DAD4-6581-4CDD-9A23-16681CB48817}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookzilla.API.Services", "Bookzilla.API.Services\Bookzilla.API.Services.csproj", "{A6499FA1-094E-4EF3-9029-48F6873BB8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bookzilla.API.Services", "Bookzilla.API.Services\Bookzilla.API.Services.csproj", "{A6499FA1-094E-4EF3-9029-48F6873BB8CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
