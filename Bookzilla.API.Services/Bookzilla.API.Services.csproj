@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentFTP" Version="42.0.1" />
+    <PackageReference Include="SharpCompress" Version="0.32.2" />
     <PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
   </ItemGroup>
 

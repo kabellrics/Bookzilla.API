@@ -18,31 +18,52 @@ namespace Bookzilla.API.Services.Implémentation
             this.fTPsettings = fTPsettings;
         }
 
-        public async Task UploadCollectionArt(Stream filestream,string Filename)
+        public async Task<String> UploadCollectionArt(Stream filestream,string Filename)
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
             {
                 await client.AutoConnect();
                 var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.CollectionArtPath, Filename);
                 await client.UploadStream(filestream, remotePath,FtpRemoteExists.Overwrite,true);
+                return remotePath;
             }
         }
-        public async Task UploadSerieArt(Stream filestream,string Filename)
+        public async Task<String> UploadSerieArt(Stream filestream,string Filename)
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
             {
                 await client.AutoConnect();
                 var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.SerieCoverPath, Filename);
                 await client.UploadStream(filestream, remotePath,FtpRemoteExists.Overwrite,true);
+                return remotePath;
             }
         }
-        public async Task UploadFileArt(Stream filestream,string Filename)
+        public async Task<String> UploadSerieArt(String filesource,String filename)
+        {
+            using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
+            {
+                await client.AutoConnect();
+                var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.SerieCoverPath, filename);
+                await client.UploadFile(filesource, remotePath,FtpRemoteExists.Overwrite,true);
+                return remotePath;
+            }
+        }
+        public async Task<String> UploadFileArt(Stream filestream,string Filename)
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
             {
                 await client.AutoConnect();
                 var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.AlbumPath, Filename);
                 await client.UploadStream(filestream, remotePath,FtpRemoteExists.Overwrite,true);
+                return remotePath;
+            }
+        }
+        public async Task DownloadOnLocalFile(String target,string source)
+        {
+            using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
+            {
+                await client.AutoConnect();
+                await client.DownloadFile(target, source,FtpLocalExists.Overwrite);
             }
         }
     }

@@ -39,15 +39,27 @@ namespace Bookzilla.API.Services.Implémentation
         //    return _unitOfWork.Series.Find(expression);
         //}
 
-        public string GetCoverForSeries(SerieDTO entity)
+        public async Task GetCoverForSeries(SerieDTO entity)
         {
             var firstfile = _unitOfWork.Albums.Find(x => x.SerieId == entity.Id).OrderBy(x => x.Order).FirstOrDefault();
-
+            if (firstfile != null)
+            {
+                await _ftpservice.DownloadOnLocalFile(Path.Combine("temp", $"{Path.GetFileName(firstfile.Path)}"), firstfile.Path);
+                var coverpath = await _coverextractorservice.ExtractCoverForFile(Path.Combine("temp", $"{Path.GetFileName(firstfile.Path)}"));
+                var ext = Path.GetExtension(coverpath);
+                entity.CoverArtPath = await _ftpservice.UploadSerieArt(coverpath, $"{entity.Name}{ext}");
+                Directory.Delete("temp", true);
+            }
         }
-        public void Add(SerieDTO entity, String filename, Stream ImageArtStream)
+        public async Task GetCoverForSeries(int entityID)
+        {
+            var entity = _unitOfWork.Series.GetById(entityID);
+            GetCoverForSeries(_mapper.Map<SerieDTO>(entity));
+        }
+        public async void Add(SerieDTO entity, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
-            _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Name}{ext}");
+            entity.CoverArtPath = await _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Name}{ext}");
             this.Add(entity);
         }
         public void Add(SerieDTO entity)

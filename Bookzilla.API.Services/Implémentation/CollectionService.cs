@@ -37,10 +37,10 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Collections.Find(expression);
         //}
-        public void Add(CollectionDTO entity,String filename, Stream ImageArtStream)
+        public async void Add(CollectionDTO entity,String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
-            _ftpservice.UploadCollectionArt(ImageArtStream, $"{entity.Name}{ext}");
+            entity.ImageArtPath = await _ftpservice.UploadCollectionArt(ImageArtStream, $"{entity.Name}{ext}");
             this.Add(entity);
         }
         public void Add(CollectionDTO entity)

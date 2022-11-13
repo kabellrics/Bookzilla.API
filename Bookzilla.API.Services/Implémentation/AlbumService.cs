@@ -37,9 +37,9 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Albums.Find(expression);
         //}
-        public void Add(AlbumDTO entity, String filename, Stream ImageArtStream)
+        public async void Add(AlbumDTO entity, String filename, Stream ImageArtStream)
         {
-            Task.Run(() => _ftpservice.UploadSerieArt(ImageArtStream, filename));
+            entity.Path = await _ftpservice.UploadFileArt(ImageArtStream, filename);
             this.Add(entity);
     }
     public void Add(AlbumDTO entity)

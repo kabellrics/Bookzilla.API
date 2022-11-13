@@ -9,5 +9,6 @@ namespace Bookzilla.API.Services.Interface
 {
     public interface ICoverExtractorService
     {
+        Task<String> ExtractCoverForFile(String path);
     }
 }
