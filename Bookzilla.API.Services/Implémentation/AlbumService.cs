@@ -1,4 +1,8 @@
-﻿using Bookzilla.API.Models;
+﻿
+using AutoMapper;
+using Bookzilla.API.Mapper;
+using Bookzilla.API.Models;
+using Bookzilla.API.Repository;
 using Bookzilla.API.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,40 +17,49 @@ namespace Bookzilla.API.Services.Implémentation
     public class AlbumService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public AlbumService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        private readonly IFTPService _ftpservice;
+        public AlbumService(IUnitOfWork unitOfWork, IMapper mapper, IFTPService ftpservice)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            _ftpservice = ftpservice;
         }
-        public IEnumerable<Album> Get()
+        public IEnumerable<AlbumDTO> Get()
         {
-            return _unitOfWork.Albums.GetAll();
+            return _mapper.Map<IEnumerable<AlbumDTO>>(_unitOfWork.Albums.GetAll());
         }
-        public Album GetById(int id)
+        public AlbumDTO GetById(int id)
         {
-            return _unitOfWork.Albums.GetById(id);
+            return _mapper.Map<AlbumDTO>(_unitOfWork.Albums.GetById(id));
         }
-        public IEnumerable<Album> Find(Expression<Func<Album, bool>> expression)
+        //public IEnumerable<AlbumDTO> Find(Expression<Func<AlbumDTO, bool>> expression)
+        //{
+        //    return _unitOfWork.Albums.Find(expression);
+        //}
+        public void Add(AlbumDTO entity, String filename, Stream ImageArtStream)
         {
-            return _unitOfWork.Albums.Find(expression);
-        }
-        public void Add(Album entity)
+            Task.Run(() => _ftpservice.UploadSerieArt(ImageArtStream, filename));
+            this.Add(entity);
+    }
+    public void Add(AlbumDTO entity)
         {
-            _unitOfWork.Albums.Add(entity);
+            _unitOfWork.Albums.Add(_mapper.Map<Album>(entity));
             _unitOfWork.Complete();
         }
-        public void AddRange(IEnumerable<Album> entities)
+        public void AddRange(IEnumerable<AlbumDTO> entities)
         {
-            _unitOfWork.Albums.AddRange(entities);
+            _unitOfWork.Albums.AddRange(_mapper.Map<IEnumerable<Album>>(entities));
             _unitOfWork.Complete();
         }
-        public void Remove(Album entity)
+        public void Remove(AlbumDTO entity)
         {
-            _unitOfWork.Albums.Remove(entity);
+            _unitOfWork.Albums.Remove(_mapper.Map<Album>(entity));
             _unitOfWork.Complete();
         }
-        public void RemoveRange(IEnumerable<Album> entities)
+        public void RemoveRange(IEnumerable<AlbumDTO> entities)
         {
-            _unitOfWork.Albums.RemoveRange(entities);
+            _unitOfWork.Albums.RemoveRange(_mapper.Map<IEnumerable<Album>>(entities));
             _unitOfWork.Complete();
         }
     }

@@ -1,14 +1,6 @@
 ﻿using Bookzilla.API.DataAccessLayer;
-using Bookzilla.API.Models;
-using Bookzilla.API.Repository;
-using Bookzilla.API.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Bookzilla.API.Services.Implémentation
+namespace Bookzilla.API.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {

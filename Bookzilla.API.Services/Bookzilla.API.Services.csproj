@@ -7,12 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Bookzilla.API.Models\Bookzilla.API.Models.csproj" />
+    <ProjectReference Include="..\Bookzilla.API.Mapper\Bookzilla.API.Mapper.csproj" />
     <ProjectReference Include="..\Bookzilla.API.Repository\Bookzilla.API.Repository.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentFTP" Version="42.0.1" />
+    <PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
   </ItemGroup>
 
 </Project>

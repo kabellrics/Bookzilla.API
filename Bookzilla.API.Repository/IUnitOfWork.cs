@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bookzilla.API.Services.Interface
+namespace Bookzilla.API.Repository
 {
     public interface IUnitOfWork : IDisposable
     {

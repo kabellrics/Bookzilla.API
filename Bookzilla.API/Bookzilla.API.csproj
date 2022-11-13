@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Bookzilla.API.DataAccessLayer\Bookzilla.API.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Bookzilla.API.Models\Bookzilla.API.Models.csproj" />
+    <ProjectReference Include="..\Bookzilla.API.Mapper\Bookzilla.API.Mapper.csproj" />
     <ProjectReference Include="..\Bookzilla.API.Services\Bookzilla.API.Services.csproj" />
   </ItemGroup>
 

@@ -8,5 +8,8 @@ namespace Bookzilla.API.Services.Interface
 {
     public interface IFTPService
     {
+        Task UploadCollectionArt(Stream filestream, string Filename);
+        Task UploadSerieArt(Stream filestream, string Filename);
+        Task UploadFileArt(Stream filestream, string Filename);
     }
 }

@@ -17,6 +17,7 @@ builder.Services.AddTransient<ISerieRepository, SerieRepository>();
 builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
 builder.Services.AddTransient<ICollectionRepository, CollectionRepository>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<ICoverExtractorService, CoverExtractorService>();
 builder.Services.AddTransient<IFTPService>(x=> new FTPService(FTPsettings));
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
