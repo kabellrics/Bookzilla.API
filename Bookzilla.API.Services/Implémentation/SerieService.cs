@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bookzilla.API.Services.Implémentation
 {
-    public class SerieService
+    public class SerieService : ISerieService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -54,13 +54,21 @@ namespace Bookzilla.API.Services.Implémentation
         public async Task GetCoverForSeries(int entityID)
         {
             var entity = _unitOfWork.Series.GetById(entityID);
-            GetCoverForSeries(_mapper.Map<SerieDTO>(entity));
+            await GetCoverForSeries(_mapper.Map<SerieDTO>(entity));
         }
         public async void Add(SerieDTO entity, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
             entity.CoverArtPath = await _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Name}{ext}");
             this.Add(entity);
+        }
+        public void Update(SerieDTO entity)
+        {
+            var item = _unitOfWork.Series.GetById(entity.Id);
+            item.Name = entity.Name;
+            item.CoverArtPath = entity.CoverArtPath;
+            item.CollectionId = entity.CollectionId;
+            _unitOfWork.Complete();
         }
         public void Add(SerieDTO entity)
         {

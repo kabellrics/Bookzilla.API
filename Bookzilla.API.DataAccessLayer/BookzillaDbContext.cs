@@ -33,7 +33,17 @@ namespace Bookzilla.API.DataAccessLayer
             //options.UseSqlite("Data Source=bookzilla.db");
             //Database.EnsureCreated();
         }
-            //=> options.UseSqlite($"Data Source={DbPath}");
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Collection>().HasData(
+                new Collection()
+                {
+                     Id = 1,
+                     Name = "Autres",
+                     ImageArtPath = Path.Combine("homes","yflechel","Livre", "CollectionArt", "Autres.jpg")
+        });
+        }
+        //=> options.UseSqlite($"Data Source={DbPath}");
     }
 
 }

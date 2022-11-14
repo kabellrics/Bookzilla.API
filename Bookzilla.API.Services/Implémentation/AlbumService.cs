@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Bookzilla.API.Services.Implémentation
 {
-    public class AlbumService
+    public class AlbumService : IAlbumService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -41,8 +41,19 @@ namespace Bookzilla.API.Services.Implémentation
         {
             entity.Path = await _ftpservice.UploadFileArt(ImageArtStream, filename);
             this.Add(entity);
-    }
-    public void Add(AlbumDTO entity)
+        }
+        public void Update(AlbumDTO entity)
+        {
+            var item = _unitOfWork.Albums.GetById(entity.Id);
+            item.Name = entity.Name;
+            item.Order = entity.Order;
+            item.CurrentPage = entity.CurrentPage;
+            item.SerieId = entity.SerieId;
+            item.Path = entity.Path;
+            item.ReadingStatus = entity.ReadingStatus;
+            _unitOfWork.Complete();
+        }
+        public void Add(AlbumDTO entity)
         {
             _unitOfWork.Albums.Add(_mapper.Map<Album>(entity));
             _unitOfWork.Complete();

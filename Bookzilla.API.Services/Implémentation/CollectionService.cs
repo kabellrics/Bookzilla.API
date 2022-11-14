@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bookzilla.API.Services.Implémentation
 {
-    public class CollectionService
+    public class CollectionService : ICollectionService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -37,11 +37,18 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Collections.Find(expression);
         //}
-        public async void Add(CollectionDTO entity,String filename, Stream ImageArtStream)
+        public async void Add(CollectionDTO entity, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
             entity.ImageArtPath = await _ftpservice.UploadCollectionArt(ImageArtStream, $"{entity.Name}{ext}");
             this.Add(entity);
+        }
+        public void Update(CollectionDTO entity)
+        {
+            var item = _unitOfWork.Collections.GetById(entity.Id);
+            item.Name = entity.Name;
+            item.ImageArtPath = entity.ImageArtPath;            
+            _unitOfWork.Complete();
         }
         public void Add(CollectionDTO entity)
         {
@@ -60,7 +67,7 @@ namespace Bookzilla.API.Services.Implémentation
         }
         public void RemoveRange(IEnumerable<CollectionDTO> entities)
         {
-            _unitOfWork.Collections.RemoveRange(_mapper.Map<IEnumerable<Collections>>(entities));
+            _unitOfWork.Collections.RemoveRange(_mapper.Map<IEnumerable<Collection>>(entities));
             _unitOfWork.Complete();
         }
     }

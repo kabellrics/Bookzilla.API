@@ -13,9 +13,9 @@ FTPConfig FTPsettings = builder.Configuration.GetSection("FTPConfig").Get<FTPCon
 // Add services to the container.
 builder.Services.AddDbContext<BookzillaDbContext>(options => options.UseSqlite("Data Source = bookzilla.db"));
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddTransient<ISerieRepository, SerieRepository>();
-builder.Services.AddTransient<IAlbumRepository, AlbumRepository>();
-builder.Services.AddTransient<ICollectionRepository, CollectionRepository>();
+builder.Services.AddTransient<ICollectionService, CollectionService>();
+builder.Services.AddTransient<IAlbumService, AlbumService>();
+builder.Services.AddTransient<ISerieService, SerieService>();
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 builder.Services.AddTransient<ICoverExtractorService, CoverExtractorService>();
 builder.Services.AddTransient<IFTPService>(x=> new FTPService(FTPsettings));
