@@ -15,9 +15,10 @@ namespace Bookzilla.API.Repository
         {
             _context = context;
         }
-        public void Add(T entity)
+        public T Add(T entity)
         {
             _context.Set<T>().Add(entity);
+            return entity;
         }
         public void AddRange(IEnumerable<T> entities)
         {

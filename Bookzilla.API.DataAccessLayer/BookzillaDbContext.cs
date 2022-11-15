@@ -35,12 +35,20 @@ namespace Bookzilla.API.DataAccessLayer
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Album>()
+                .Property(i => i.ReadingStatus)
+                .HasDefaultValue(ReadingStatus.NonLu);
+
+            modelBuilder.Entity<Serie>()
+                .Property(i => i.CollectionId)
+                .HasDefaultValue(1);
+
             modelBuilder.Entity<Collection>().HasData(
                 new Collection()
                 {
                      Id = 1,
                      Name = "Autres",
-                     ImageArtPath = Path.Combine("homes","yflechel","Livre", "CollectionArt", "Autres.jpg")
+                     ImageArtPath = Path.Combine("homes","yflechel","Livre", "CollectionArt", "1.jpg")
         });
         }
         //=> options.UseSqlite($"Data Source={DbPath}");

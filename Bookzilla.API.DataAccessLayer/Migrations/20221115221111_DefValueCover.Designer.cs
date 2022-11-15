@@ -2,6 +2,7 @@
 using Bookzilla.API.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookzilla.API.DataAccessLayer.Migrations
 {
     [DbContext(typeof(BookzillaDbContext))]
-    partial class BookzillaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221115221111_DefValueCover")]
+    partial class DefValueCover
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");

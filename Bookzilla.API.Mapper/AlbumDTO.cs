@@ -15,6 +15,7 @@ namespace Bookzilla.API.Mapper
         public string Path { get; set; }
         public int Order { get; set; }
         public int CurrentPage { get; set; }
+        public string CoverArtPath { get; set; }
         public ReadingStatus ReadingStatus { get; set; }
     }
 }

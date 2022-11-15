@@ -44,11 +44,7 @@ namespace Bookzilla.API.Services.Implémentation
             var firstfile = _unitOfWork.Albums.Find(x => x.SerieId == entity.Id).OrderBy(x => x.Order).FirstOrDefault();
             if (firstfile != null)
             {
-                await _ftpservice.DownloadOnLocalFile(Path.Combine("temp", $"{Path.GetFileName(firstfile.Path)}"), firstfile.Path);
-                var coverpath = await _coverextractorservice.ExtractCoverForFile(Path.Combine("temp", $"{Path.GetFileName(firstfile.Path)}"));
-                var ext = Path.GetExtension(coverpath);
-                entity.CoverArtPath = await _ftpservice.UploadSerieArt(coverpath, $"{entity.Name}{ext}");
-                Directory.Delete("temp", true);
+                entity.CoverArtPath = firstfile.CoverArtPath;
             }
         }
         public async Task GetCoverForSeries(int entityID)

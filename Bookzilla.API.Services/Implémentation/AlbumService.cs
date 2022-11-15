@@ -19,11 +19,13 @@ namespace Bookzilla.API.Services.Implémentation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFTPService _ftpservice;
-        public AlbumService(IUnitOfWork unitOfWork, IMapper mapper, IFTPService ftpservice)
+        private readonly ICoverExtractorService _coverextractorservice;
+        public AlbumService(IUnitOfWork unitOfWork, IMapper mapper, IFTPService ftpservice, ICoverExtractorService coverextractorservice)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _ftpservice = ftpservice;
+            _coverextractorservice = coverextractorservice;
         }
         public IEnumerable<AlbumDTO> Get()
         {
@@ -40,7 +42,12 @@ namespace Bookzilla.API.Services.Implémentation
         public async void Add(AlbumDTO entity, String filename, Stream ImageArtStream)
         {
             entity.Path = await _ftpservice.UploadFileArt(ImageArtStream, filename);
-            this.Add(entity);
+            await _ftpservice.DownloadOnLocalFile(Path.Combine("temp", $"{Path.GetFileName(entity.Path)}"), entity.Path);
+            var coverpath = await _coverextractorservice.ExtractCoverForFile(Path.Combine("temp", $"{Path.GetFileName(entity.Path)}"));
+            var ext = Path.GetExtension(coverpath);
+            var dbentity = this.Add(entity);
+            entity.CoverArtPath = await _ftpservice.UploadSerieArt(coverpath, $"{dbentity.Id}{ext}");
+            Directory.Delete("temp", true);
         }
         public void Update(AlbumDTO entity)
         {
@@ -50,13 +57,15 @@ namespace Bookzilla.API.Services.Implémentation
             item.CurrentPage = entity.CurrentPage;
             item.SerieId = entity.SerieId;
             item.Path = entity.Path;
+            item.CoverArtPath = entity.CoverArtPath;  
             item.ReadingStatus = entity.ReadingStatus;
             _unitOfWork.Complete();
         }
-        public void Add(AlbumDTO entity)
+        public Album Add(AlbumDTO entity)
         {
             _unitOfWork.Albums.Add(_mapper.Map<Album>(entity));
             _unitOfWork.Complete();
+            return entity;
         }
         public void AddRange(IEnumerable<AlbumDTO> entities)
         {
