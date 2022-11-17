@@ -5,8 +5,9 @@ namespace Bookzilla.API.Services.Interface
     public interface ICollectionService
     {
         void Update(CollectionDTO entity);
-        void Add(CollectionDTO entity);
-        void Add(CollectionDTO entity, string filename, Stream ImageArtStream);
+        CollectionDTO Add(CollectionDTO entity);
+        Task<CollectionDTO> Add(CollectionDTO entity, string filename, Stream ImageArtStream);
+        Task<CollectionDTO> AddFile(int id, String filename, Stream ImageArtStream);
         void AddRange(IEnumerable<CollectionDTO> entities);
         IEnumerable<CollectionDTO> Get();
         CollectionDTO GetById(int id);

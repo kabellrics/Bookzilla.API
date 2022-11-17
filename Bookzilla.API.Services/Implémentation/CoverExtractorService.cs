@@ -4,6 +4,7 @@ using ICSharpCode.SharpZipLib.Zip;
 using SharpCompress.Archives;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,69 +34,86 @@ namespace Bookzilla.API.Services.Implémentation
 
         private String ExtractCoverForCBR(string path)
         {
-            var archive = ArchiveFactory.Open(path);
-            var firstpage = archive.Entries.FirstOrDefault(x => x.IsDirectory == false);
-            if(firstpage != null)
+            using (var archive = ArchiveFactory.Open(path))
             {
-                return firstpage.Key;
+                var firstpage = archive.Entries.OrderBy(x => x.Key).FirstOrDefault(x => x.IsDirectory == false);
+                if (firstpage != null)
+                {
+                    var tempfile = Path.Combine("temp", $"cover{Path.GetExtension(firstpage.Key)}");
+                    firstpage.WriteToFile(tempfile);
+                    return tempfile;
+                }
+                else
+                    return string.Empty;
             }
-            else
-                return string.Empty;
         }
 
         private String ExtractCoverForCBZ(string FilePath)
         {
-
-            using (ZipInputStream s = new ZipInputStream(File.OpenRead(FilePath)))
+            using (var archive = ArchiveFactory.Open(FilePath))
             {
-                ZipEntry theEntry;
-                while ((theEntry = s.GetNextEntry()) != null)
+                var firstpage = archive.Entries.OrderBy(x => x.Key).FirstOrDefault(x => x.IsDirectory == false);
+                if (firstpage != null)
                 {
-
-                    string directoryName = Path.GetDirectoryName(theEntry.Name);
-                    string fileName = Path.GetFileName(theEntry.Name);
-
-                    // create directory if the archive has a folder at root
-                    if (directoryName.Length > 0)
-                    {
-                        string fDirectory = Path.GetTempPath() + directoryName;
-
-                        //We need to delete the directory is it's already 
-                        //there so we get the first entry
-                        if (Directory.Exists(fDirectory))
-                        {
-                            Directory.Delete(fDirectory, true);
-                        }
-                        Directory.CreateDirectory(fDirectory);
-                    }
-
-                    string fullPath = Path.GetTempPath() + theEntry.Name;
-
-                    if (fileName != String.Empty && !File.Exists(fullPath))
-                    {
-                        using (FileStream streamWriter = File.Create(fullPath))
-                        {
-                            int size = 2048;
-                            byte[] data = new byte[2048];
-                            while (true)
-                            {
-                                size = s.Read(data, 0, data.Length);
-                                if (size > 0)
-                                {
-                                    streamWriter.Write(data, 0, size);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            return fullPath;
-                        }
-                    }
-                    return string.Empty;
+                    var tempfile = Path.Combine("temp", $"cover{Path.GetExtension(firstpage.Key)}");
+                    firstpage.WriteToFile(tempfile);
+                    return tempfile;
                 }
+                else
+                    return string.Empty;
             }
-            return string.Empty;
+            #region Comment
+            //using (ZipInputStream s = new ZipInputStream(File.OpenRead(FilePath)))
+            //{
+            //    ZipEntry theEntry;
+            //    while ((theEntry = s.GetNextEntry()) != null)
+            //    {
+
+            //        string directoryName = Path.GetDirectoryName(theEntry.Name);
+            //        string fileName = Path.GetFileName(theEntry.Name);
+
+            //        // create directory if the archive has a folder at root
+            //        if (directoryName.Length > 0)
+            //        {
+            //            string fDirectory = Path.GetTempPath() + directoryName;
+
+            //            //We need to delete the directory is it's already 
+            //            //there so we get the first entry
+            //            if (Directory.Exists(fDirectory))
+            //            {
+            //                Directory.Delete(fDirectory, true);
+            //            }
+            //            Directory.CreateDirectory(fDirectory);
+            //        }
+
+            //        string fullPath = Path.GetTempPath() + theEntry.Name;
+
+            //        if (fileName != String.Empty && !File.Exists(fullPath))
+            //        {
+            //            using (FileStream streamWriter = File.Create(fullPath))
+            //            {
+            //                int size = 2048;
+            //                byte[] data = new byte[2048];
+            //                while (true)
+            //                {
+            //                    size = s.Read(data, 0, data.Length);
+            //                    if (size > 0)
+            //                    {
+            //                        streamWriter.Write(data, 0, size);
+            //                    }
+            //                    else
+            //                    {
+            //                        break;
+            //                    }
+            //                }
+            //                return fullPath;
+            //            }
+            //        }
+            //        return string.Empty;
+            //    }
+            //}
+            //return string.Empty; 
+            #endregion
         }
     }
 }

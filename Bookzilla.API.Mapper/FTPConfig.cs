@@ -13,6 +13,7 @@ namespace Bookzilla.API.Mapper
         public string Adresse { get; set; }
         public string Path { get; set; }
         public string CollectionArtPath { get; set; }
+        public string AlbumCoverPath { get; set; }
         public string SerieCoverPath { get; set; }
         public string AlbumPath { get; set; }
     }

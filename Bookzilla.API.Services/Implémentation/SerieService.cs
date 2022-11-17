@@ -38,8 +38,15 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Series.Find(expression);
         //}
-
-        public async Task GetCoverForSeries(SerieDTO entity)
+        public void SetDefaultCoverForSeries()
+        {
+            foreach(var entity in _unitOfWork.Series.Find(x=>string.IsNullOrEmpty(x.CoverArtPath)))
+            {
+                entity.CoverArtPath = GetCoverForSeries(entity.Id);
+                _unitOfWork.Complete();
+            }
+        }
+        public void GetCoverForSeries(SerieDTO entity)
         {
             var firstfile = _unitOfWork.Albums.Find(x => x.SerieId == entity.Id).OrderBy(x => x.Order).FirstOrDefault();
             if (firstfile != null)
@@ -47,16 +54,21 @@ namespace Bookzilla.API.Services.Implémentation
                 entity.CoverArtPath = firstfile.CoverArtPath;
             }
         }
-        public async Task GetCoverForSeries(int entityID)
+        public String GetCoverForSeries(int entityID)
         {
-            var entity = _unitOfWork.Series.GetById(entityID);
-            await GetCoverForSeries(_mapper.Map<SerieDTO>(entity));
+            var firstfile = _unitOfWork.Albums.Find(x => x.SerieId == entityID).OrderBy(x => x.Order).FirstOrDefault();
+            if (firstfile != null)
+            {
+                return firstfile.CoverArtPath;
+            }
+            return String.Empty;
         }
-        public async void Add(SerieDTO entity, String filename, Stream ImageArtStream)
+        public async Task<SerieDTO> AddFile(int id, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
-            entity.CoverArtPath = await _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Name}{ext}");
-            this.Add(entity);
+            var entity = this.GetById(id);
+            entity.CoverArtPath = await _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Id}{ext}");
+            return this.Add(entity);
         }
         public void Update(SerieDTO entity)
         {
@@ -66,10 +78,13 @@ namespace Bookzilla.API.Services.Implémentation
             item.CollectionId = entity.CollectionId;
             _unitOfWork.Complete();
         }
-        public void Add(SerieDTO entity)
+        public SerieDTO Add(SerieDTO entity)
         {
-            _unitOfWork.Series.Add(_mapper.Map<Serie>(entity));
+            var serie = _unitOfWork.Series.Add(_mapper.Map<Serie>(entity));
             _unitOfWork.Complete();
+            serie.CoverArtPath = GetCoverForSeries(serie.Id);
+            _unitOfWork.Complete();
+            return _mapper.Map<SerieDTO>(serie);
         }
         public void AddRange(IEnumerable<SerieDTO> entities)
         {

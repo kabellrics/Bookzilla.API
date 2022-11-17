@@ -12,12 +12,9 @@ namespace Bookzilla.API.Mapper
     {
         public BookzillaMapper()
         {
-            CreateMap<AlbumDTO, Album>();
-            CreateMap<Album, AlbumDTO>();
-            CreateMap<SerieDTO, Serie>();
-            CreateMap<Serie, SerieDTO>();
-            CreateMap<CollectionDTO, Collection>();
-            CreateMap<Collection, CollectionDTO>();
+            CreateMap<AlbumDTO, Album>().ReverseMap();
+            CreateMap<SerieDTO, Serie>().ReverseMap();
+            CreateMap<CollectionDTO, Collection>().ReverseMap();
         }
     }
 }

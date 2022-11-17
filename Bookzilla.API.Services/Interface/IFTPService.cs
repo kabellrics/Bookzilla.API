@@ -10,7 +10,7 @@ namespace Bookzilla.API.Services.Interface
     {
         Task<String> UploadCollectionArt(Stream filestream, string Filename);
         Task<String> UploadSerieArt(Stream filestream, string Filename);
-        Task<String> UploadSerieArt(String filesource, String filename);
+        Task<String> UploadAlbumCover(String filesource, String filename);
         Task<String> UploadFileArt(Stream filestream, string Filename);
         Task DownloadOnLocalFile(String target, string source);
     }

@@ -37,11 +37,20 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Collections.Find(expression);
         //}
-        public async void Add(CollectionDTO entity, String filename, Stream ImageArtStream)
+        public async Task<CollectionDTO> Add(CollectionDTO entity, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);
-            entity.ImageArtPath = await _ftpservice.UploadCollectionArt(ImageArtStream, $"{entity.Name}{ext}");
-            this.Add(entity);
+            var collec = this.Add(entity);
+            collec.ImageArtPath = await _ftpservice.UploadCollectionArt(ImageArtStream, $"{collec.Id}{ext}");
+            return collec;
+        }
+        public async Task<CollectionDTO> AddFile(int id, String filename, Stream ImageArtStream)
+        {
+            var ext = Path.GetExtension(filename);
+            var collec = this.GetById(id);
+            collec.ImageArtPath = await _ftpservice.UploadCollectionArt(ImageArtStream, $"{collec.Id}{ext}");
+            this.Update(collec);
+            return collec;
         }
         public void Update(CollectionDTO entity)
         {
@@ -50,10 +59,11 @@ namespace Bookzilla.API.Services.Implémentation
             item.ImageArtPath = entity.ImageArtPath;            
             _unitOfWork.Complete();
         }
-        public void Add(CollectionDTO entity)
+        public CollectionDTO Add(CollectionDTO entity)
         {
-            _unitOfWork.Collections.Add(_mapper.Map<Collection>(entity));
+            var collec = _unitOfWork.Collections.Add(_mapper.Map<Collection>(entity));
             _unitOfWork.Complete();
+            return _mapper.Map<CollectionDTO>(collec);
         }
         public void AddRange(IEnumerable<CollectionDTO> entities)
         {

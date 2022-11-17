@@ -1,4 +1,4 @@
-﻿using Bookzilla.API.Models;
+﻿using Bookzilla.API.Mapper;
 using Bookzilla.API.Services.Interface;
 using FluentFTP;
 using System;
@@ -22,10 +22,18 @@ namespace Bookzilla.API.Services.Implémentation
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
             {
-                await client.AutoConnect();
-                var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.CollectionArtPath, Filename);
-                await client.UploadStream(filestream, remotePath,FtpRemoteExists.Overwrite,true);
-                return remotePath;
+                try
+                {
+                    await client.AutoConnect();
+                    var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.CollectionArtPath, Filename);
+                    await client.UploadStream(filestream, remotePath, FtpRemoteExists.Overwrite, true);
+                    return remotePath;
+                }
+                catch (Exception ex)
+                {
+                    //throw;
+                    return String.Empty;
+                }
             }
         }
         public async Task<String> UploadSerieArt(Stream filestream,string Filename)
@@ -38,12 +46,12 @@ namespace Bookzilla.API.Services.Implémentation
                 return remotePath;
             }
         }
-        public async Task<String> UploadSerieArt(String filesource,String filename)
+        public async Task<String> UploadAlbumCover(String filesource,String filename)
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))
             {
                 await client.AutoConnect();
-                var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.SerieCoverPath, filename);
+                var remotePath = Path.Combine(fTPsettings.Path, fTPsettings.AlbumCoverPath, filename);
                 await client.UploadFile(filesource, remotePath,FtpRemoteExists.Overwrite,true);
                 return remotePath;
             }
