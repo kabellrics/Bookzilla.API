@@ -45,33 +45,6 @@ namespace Bookzilla.API.Controllers
             }
         }
 
-        [HttpPost("PostWithFile/{name}"), DisableRequestSizeLimit]
-        public async Task<ActionResult<CollectionDTO>> PostFile(string name, IFormFile fileData)
-        {
-            if(CheckIfImageFile(fileData.FileName))
-            {
-                CollectionDTO collec = new CollectionDTO() { Name = name };
-                collec = await _collectionService.Add(collec,fileData.FileName,fileData.OpenReadStream());
-                return Ok(collec);
-            }
-            else
-            {
-                return BadRequest(new { message = "Invalid File" });
-            }
-        }
-        [HttpPost("UpdateFile/{id}"), DisableRequestSizeLimit]
-        public async Task<ActionResult<CollectionDTO>> UpdateFile(int id,IFormFile fileData)
-        {
-            if(CheckIfImageFile(fileData.FileName))
-            {
-                var collec = await _collectionService.AddFile(id, fileData.FileName,fileData.OpenReadStream());
-                return Ok(collec);
-            }
-            else
-            {
-                return BadRequest(new { message = "Invalid File" });
-            }
-        }
         // PUT api/<CollectionController>/5
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] CollectionDTO todoItem)
@@ -103,11 +76,6 @@ namespace Bookzilla.API.Controllers
             }
             _collectionService.Remove(todoItem);
             return NoContent();
-        }
-        private bool CheckIfImageFile(string FileName)
-        {
-            var extension = "." + FileName.Split('.')[FileName.Split('.').Length - 1];
-            return (extension == ".jpg" || extension == ".jpeg" || extension == ".png"); // Change the extension based on your need
         }
     }
 }

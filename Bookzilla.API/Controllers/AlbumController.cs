@@ -28,20 +28,6 @@ namespace Bookzilla.API.Controllers
         {
             return Ok(_albumService.GetById(id));
         }
-        [HttpPost("PostWithFile"), DisableRequestSizeLimit]
-        public async Task<ActionResult<AlbumDTO>> PostFile(int order,int serieId, IFormFile fileData)
-        {
-            if (CheckIfComicsFile(fileData.FileName))
-            {
-                AlbumDTO collec = new AlbumDTO() { SerieId= serieId,Order = order,Name = Path.GetFileNameWithoutExtension(fileData.FileName),CurrentPage=0,CoverArtPath=String.Empty, Path = String.Empty };
-                collec = await _albumService.AddWithFile(collec, fileData.FileName, fileData.OpenReadStream());
-                return Ok(collec);
-            }
-            else
-            {
-                return BadRequest(new { message = "Invalid File" });
-            }
-        }
         // POST api/<CollectionController>
         [HttpPost]
         public ActionResult Post([FromBody] AlbumDTO value)
@@ -88,11 +74,6 @@ namespace Bookzilla.API.Controllers
             }
             _albumService.Remove(todoItem);
             return NoContent();
-        }
-        private bool CheckIfComicsFile(string FileName)
-        {
-            var extension = "." + FileName.Split('.')[FileName.Split('.').Length - 1];
-            return (extension == ".cbz" || extension == ".cbr"); // Change the extension based on your need
         }
 
     }
