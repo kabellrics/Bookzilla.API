@@ -4,6 +4,7 @@ using Bookzilla.API.Mapper;
 using Bookzilla.API.Models;
 using Bookzilla.API.Repository;
 using Bookzilla.API.Services.Interface;
+using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,9 @@ namespace Bookzilla.API.Services.Implémentation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFTPService _ftpservice;
+        private const string MimepngType = "image/png";
+        private const string MimejpgType = "image/jpg";
+        private const string MimeJPEGType = "image/jpeg";
         public CollectionService(IUnitOfWork unitOfWork, IMapper mapper, IFTPService ftpservice)
         {
             _unitOfWork = unitOfWork;
@@ -37,6 +41,32 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Collections.Find(expression);
         //}
+        public async Task<(Stream, String, String)> GetCoverData(int id)
+        {
+            var item = _unitOfWork.Collections.GetById(id);
+            if (!string.IsNullOrEmpty(item.ImageArtPath))
+            {
+                var filename = Path.GetFileName(item.ImageArtPath);
+                using (var imgstream = await _ftpservice.GetStreamAsync(item.ImageArtPath))
+                {
+                    if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimepngType, filename);
+                    }
+                    else if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimejpgType, filename);
+                    }
+                    else if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimeJPEGType, filename);
+                    }
+                    else
+                        return (null,String.Empty,String.Empty);
+                }
+            }
+            return (null, String.Empty, String.Empty);
+        }
         public async Task<CollectionDTO> Add(CollectionDTO entity, String filename, Stream ImageArtStream)
         {
             var ext = Path.GetExtension(filename);

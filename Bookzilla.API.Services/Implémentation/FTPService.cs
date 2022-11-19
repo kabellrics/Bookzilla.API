@@ -66,6 +66,19 @@ namespace Bookzilla.API.Services.Implémentation
                 return remotePath;
             }
         }
+        public async Task<Stream> GetStreamAsync(String target)
+        {
+            using (var client = new AsyncFtpClient(fTPsettings.Adresse, fTPsettings.User, fTPsettings.Password))
+            {
+                await client.AutoConnect();
+                using(var stream = new MemoryStream())
+                {
+                    await client.DownloadStream(stream, target);
+                    return stream;
+                }
+
+            }
+        }
         public async Task DownloadOnLocalFile(String target,string source)
         {
             using (var client = new AsyncFtpClient(fTPsettings.Adresse,fTPsettings.User,fTPsettings.Password))

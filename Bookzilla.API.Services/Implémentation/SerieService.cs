@@ -19,6 +19,9 @@ namespace Bookzilla.API.Services.Implémentation
         private readonly IMapper _mapper;
         private readonly IFTPService _ftpservice;
         private readonly ICoverExtractorService _coverextractorservice;
+        private const string MimepngType = "image/png";
+        private const string MimejpgType = "image/jpg";
+        private const string MimeJPEGType = "image/jpeg";
         public SerieService(IUnitOfWork unitOfWork, IMapper mapper, IFTPService ftpservice, ICoverExtractorService coverextractorservice)
         {
             _unitOfWork = unitOfWork;
@@ -69,6 +72,32 @@ namespace Bookzilla.API.Services.Implémentation
             var entity = this.GetById(id);
             entity.CoverArtPath = await _ftpservice.UploadSerieArt(ImageArtStream, $"{entity.Id}{ext}");
             return this.Add(entity);
+        }
+        public async Task<(Stream,String,String)> GetCoverData(int id)
+        {
+            var item = _unitOfWork.Series.GetById(id);
+            if (!string.IsNullOrEmpty(item.CoverArtPath))
+            {
+                var filename = Path.GetFileName(item.CoverArtPath);
+                using (var imgstream = await _ftpservice.GetStreamAsync(item.CoverArtPath))
+                {
+                    if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimepngType, filename);
+                    }
+                    else if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimejpgType, filename);
+                    }
+                    else if (Path.GetExtension(filename) == ".jpg")
+                    {
+                        return (imgstream, MimeJPEGType, filename);
+                    }
+                    else
+                        return (null, String.Empty, String.Empty);
+                }
+            }
+            return (null, String.Empty, String.Empty);
         }
         public void Update(SerieDTO entity)
         {

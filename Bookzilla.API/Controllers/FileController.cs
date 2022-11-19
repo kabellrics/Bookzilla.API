@@ -28,6 +28,42 @@ namespace Bookzilla.API.Controllers
             var extension = "." + FileName.Split('.')[FileName.Split('.').Length - 1];
             return (extension == ".jpg" || extension == ".jpeg" || extension == ".png"); // Change the extension based on your need
         }
+        [HttpGet("CollectionCover/{id}")]
+        public async Task<IActionResult> CollectionCover(int id)
+        {
+            string MimeType = string.Empty;
+            string FileName = string.Empty;
+            Stream image;
+            (image, MimeType, FileName) = await _collectionService.GetCoverData(id);
+            return File(image, MimeType, FileName);
+        }
+        [HttpGet("SerieCover/{id}")]
+        public async Task<IActionResult> SerieCover(int id)
+        {
+            string MimeType = string.Empty;
+            string FileName = string.Empty;
+            Stream image;
+            (image, MimeType, FileName) = await _serieService.GetCoverData(id);
+            return File(image, MimeType, FileName);
+        }
+        [HttpGet("AlbumCover/{id}")]
+        public async Task<IActionResult> AlbumCover(int id)
+        {
+            string MimeType = string.Empty;
+            string FileName = string.Empty;
+            Stream image;
+            (image, MimeType, FileName) = await _albumService.GetCoverData(id);
+            return File(image, MimeType, FileName);
+        }
+        [HttpGet("AlbumFile/{id}")]
+        public async Task<IActionResult> AlbumFile(int id)
+        {
+            string MimeType = string.Empty;
+            string FileName = string.Empty;
+            Stream image;
+            (image, MimeType, FileName) = await _albumService.GetFileData(id);
+            return File(image, MimeType, FileName);
+        }
         [HttpPost("CreateSerie/{name}"), DisableRequestSizeLimit]
         public async Task<ActionResult<SerieDTO>> CreateSerie(string name, IFormFile fileData)
         {

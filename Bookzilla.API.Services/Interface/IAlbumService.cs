@@ -8,6 +8,8 @@ namespace Bookzilla.API.Services.Interface
         AlbumDTO Add(AlbumDTO entity);
         Task<AlbumDTO> AddWithFile(AlbumDTO entity, string filename, Stream ImageArtStream);
         void AddRange(IEnumerable<AlbumDTO> entities);
+        Task<(Stream, String, String)> GetCoverData(int id);
+        Task<(Stream, String, String)> GetFileData(int id);
         IEnumerable<AlbumDTO> Get();
         AlbumDTO GetById(int id);
         void Remove(AlbumDTO entity);
