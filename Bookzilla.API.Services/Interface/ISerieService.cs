@@ -8,7 +8,7 @@ namespace Bookzilla.API.Services.Interface
         SerieDTO Add(SerieDTO entity);
         Task<SerieDTO> AddFile(int id, string filename, Stream ImageArtStream);
         void AddRange(IEnumerable<SerieDTO> entities);
-        Task<(Stream, String, String)> GetCoverData(int id);
+        Task<(byte[], String, String)> GetCoverData(int id);
         IEnumerable<SerieDTO> Get();
         SerieDTO GetById(int id);
         String GetCoverForSeries(int entityID);

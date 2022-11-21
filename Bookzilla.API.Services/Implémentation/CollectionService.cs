@@ -41,14 +41,13 @@ namespace Bookzilla.API.Services.Implémentation
         //{
         //    return _unitOfWork.Collections.Find(expression);
         //}
-        public async Task<(Stream, String, String)> GetCoverData(int id)
+        public async Task<(byte[], String, String)> GetCoverData(int id)
         {
             var item = _unitOfWork.Collections.GetById(id);
             if (!string.IsNullOrEmpty(item.ImageArtPath))
             {
                 var filename = Path.GetFileName(item.ImageArtPath);
-                using (var imgstream = await _ftpservice.GetStreamAsync(item.ImageArtPath))
-                {
+                var imgstream = await _ftpservice.GetStreamAsync(item.ImageArtPath);
                     if (Path.GetExtension(filename) == ".jpg")
                     {
                         return (imgstream, MimepngType, filename);
@@ -63,7 +62,7 @@ namespace Bookzilla.API.Services.Implémentation
                     }
                     else
                         return (null,String.Empty,String.Empty);
-                }
+                
             }
             return (null, String.Empty, String.Empty);
         }

@@ -33,7 +33,7 @@ namespace Bookzilla.API.Controllers
         {
             string MimeType = string.Empty;
             string FileName = string.Empty;
-            Stream image;
+            byte[] image;
             (image, MimeType, FileName) = await _collectionService.GetCoverData(id);
             return File(image, MimeType, FileName);
         }
@@ -42,7 +42,7 @@ namespace Bookzilla.API.Controllers
         {
             string MimeType = string.Empty;
             string FileName = string.Empty;
-            Stream image;
+            byte[] image;
             (image, MimeType, FileName) = await _serieService.GetCoverData(id);
             return File(image, MimeType, FileName);
         }
@@ -51,7 +51,7 @@ namespace Bookzilla.API.Controllers
         {
             string MimeType = string.Empty;
             string FileName = string.Empty;
-            Stream image;
+            byte[] image;
             (image, MimeType, FileName) = await _albumService.GetCoverData(id);
             return File(image, MimeType, FileName);
         }
@@ -60,7 +60,7 @@ namespace Bookzilla.API.Controllers
         {
             string MimeType = string.Empty;
             string FileName = string.Empty;
-            Stream image;
+            byte[] image;
             (image, MimeType, FileName) = await _albumService.GetFileData(id);
             return File(image, MimeType, FileName);
         }

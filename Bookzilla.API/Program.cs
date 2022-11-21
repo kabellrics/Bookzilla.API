@@ -41,6 +41,17 @@ var app = builder.Build();
 
 var appInitializator = new AppInitializator();
 appInitializator.CreateDbIfNotExists(app);
+app.UseForwardedHeaders(new ForwardedHeadersOptions { ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.All });
+app.Use(async (context, next) =>
+{
+    var forwardedPath = context.Request.Headers["X-Forwarded-Path"].FirstOrDefault();
+    if (!string.IsNullOrEmpty(forwardedPath))
+    {
+        context.Request.PathBase = forwardedPath;
+    }
+
+    await next();
+});
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(AllowAllHeadersPolicy);

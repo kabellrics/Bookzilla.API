@@ -58,14 +58,14 @@ namespace Bookzilla.API.Services.Implémentation
             _unitOfWork.Complete();
             return _mapper.Map<AlbumDTO>(dbentity);
         }
-        public async Task<(Stream, String, String)> GetCoverData(int id)
+        public async Task<(byte[], String, String)> GetCoverData(int id)
         {
             var item = _unitOfWork.Albums.GetById(id);
             if (!string.IsNullOrEmpty(item.CoverArtPath))
             {
                 var filename = Path.GetFileName(item.CoverArtPath);
-                using (var imgstream = await _ftpservice.GetStreamAsync(item.CoverArtPath))
-                {
+                var imgstream = await _ftpservice.GetStreamAsync(item.CoverArtPath);
+                
                     if (Path.GetExtension(filename) == ".jpg")
                     {
                         return (imgstream, MimepngType, filename);
@@ -80,18 +80,17 @@ namespace Bookzilla.API.Services.Implémentation
                     }
                     else
                         return (null, String.Empty, String.Empty);
-                }
+                
             }
             return (null, String.Empty, String.Empty);
         }
-        public async Task<(Stream, String, String)> GetFileData(int id)
+        public async Task<(byte[], String, String)> GetFileData(int id)
         {
             var item = _unitOfWork.Albums.GetById(id);
             if (!string.IsNullOrEmpty(item.Path))
             {
                 var filename = Path.GetFileName(item.Path);
-                using (var imgstream = await _ftpservice.GetStreamAsync(item.Path))
-                {
+                var imgstream = await _ftpservice.GetStreamAsync(item.Path);
                     if (Path.GetExtension(filename) == ".cbz")
                     {
                         return (imgstream, MimeCBZType, filename);
@@ -102,7 +101,7 @@ namespace Bookzilla.API.Services.Implémentation
                     }
                     else
                         return (null, String.Empty, String.Empty);
-                }
+                
             }
             return (null, String.Empty, String.Empty);
         }
